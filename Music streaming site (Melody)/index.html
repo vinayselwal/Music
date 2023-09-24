@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="style.css">
+    <title>Melody</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="preloader">
+        <img src="Melodypreloader.gif">
+    </div>
+<header>
+    <div class="menu_side">
+        <ul>
+            <li>
+                <span class="user">
+                    <img src="img/logo.jpg" alt="logo">
+                </span>
+                <span id="melody">Melody</span>
+            </li>
+        <li>
+         <h5  id="title"> Vande Mataram <br></h5>
+        <img src="img/26th.jpg" alt="Alan" id="poster_master_play" class="rotate">
+        <h5>
+            <div id="subtitle">Bankim Chandra</div>
+        </h5>
+        <div class="icon">
+            <i class="bi bi-skip-start-fill" id="back"></i>
+            <i class="bi bi-play-fill" id="masterPlay"></i>
+            <i class="bi bi-skip-end-fill" id="next"></i>
+        </div>
+    </li>
+    </ul>
+    </div>
+
+
+    <div class="song_side">
+        <nav>
+            <ul>
+                <li>Discover <span></span></li>
+                <li id="librarylink">MY LIBRARY</li>
+                <li><a href="../library/index.html"  style="text-decoration:none" id="viewlink">MY LIBRARY</a></li>
+            </ul>
+            <div class="search">
+                <div class="search-input">
+                  <i id="icon"  class="bi bi-search"></i>
+                  <input type="text" id="input-search"     placeholder="Search Music...">
+                  <ul class="autocom-box">
+                    <!-- here list are inserted from javascript -->
+                  </ul>
+                </div>
+              </div>
+              <ul class="loginbtn" id="showlogin">Login/Signup</ul>
+            <div class="popup" >
+                <div class = "closebtn">&times;</div>
+                <div class="form">
+                    <div class="tabs">
+                        <h3 class="login-tab"><a class="login active" href="#login-tab-content"><span>Login<span></a></h3>
+                        <h3 class="signup-tab"><a class="signup" href="#signup-tab-content">Sign Up</a></h3>
+                    </div>
+                    <div class="tabs-content">
+                        <div id="login-tab-content" class="active">
+                            <form class="login-form" action="/login" method="post">
+                                <input type="text" class="input" id="user_login" autocomplete="off" placeholder="Email or Username" name="nameoremail">
+                                <input type="password" class="input" id="user_pass" autocomplete="off" placeholder="Password" name="password">
+                                <input type="submit" class="button" value="Login" >
+                            </form>
+                        </div>
+                        <div id="signup-tab-content">
+                            <form class="signup-form"  action="/signup" method="post">
+                                <input type="email" class="input" id="user_email" autocomplete="off" placeholder="Email" name="email" >
+                                <input type="text" class="input" id="user_name" autocomplete="off" placeholder="Username" name="username" required>
+                                <input type="password" class="input" id="newuser_pass" autocomplete="off" placeholder="Password" name="password" required>
+                                <span class="password-note" id="password-note">Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character</span>
+1
+                                <input type="submit" class="button" value="Sign Up">
+                                
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ul class="loggedin" id="loggedInButton">Logged In <span class=tick><i class="bi bi-check2"></i></span></ul>
+            <ul class="logout" id="logoutbtn">
+                <div class ="arrow right"><i class="bi bi-box-arrow-right"></i></div>
+                <div class = "text">Log Out</div>
+            </ul>
+              <ul><li><button id="pay-button" style="display: none;" >Subscription</button></li></ul>
+              <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+              <script>
+                var options = {
+                    "key": "rzp_test_u7FHqkyoCXDKt9",
+                    "amount": "200",
+                    "currency": "INR",
+                    "name": "Melody",
+                    "description": "Pay & Checkout for subscription",
+                        "image": "img/logo.jpg",
+                    "handler": function (response){
+                        console.log(response)
+                        var songsToShow = document.getElementsByClassName('hide_song')
+                        console.log(songsToShow)
+                        for(let i = 0; i<songsToShow.length; i++){
+                            songsToShow[i].style.display = 'block';
+                        }
+                        var librarylink = document.getElementById('librarylink')
+                        var viewlink = document.getElementById('viewlink')
+                        librarylink.style.display = 'none'
+                        viewlink.style.display = 'block'
+                        document.getElementById('pay-button').style.display = 'none';
+                        // var cardhover = document.getElementsByClassName('card:hover .cardcontent')
+                        // cardhover.style.transform = `rotateY(180deg)`    
+                        
+                    },
+                    "prefill": {
+                        "contact":"9729652784",
+                        "name": "Vinay",
+                        "email": "vinayselwal@gmail.com"
+                    },
+                    "notes" : {
+                        "description":"subscriptions of melody",
+                        "access":"This course have 1 month Access"
+                    },
+                    "theme": {
+                        "color": "#2300a3"
+                    }
+                };
+                var razorpayObject = new Razorpay(options);
+                console.log(razorpayObject);
+                razorpayObject.on('payment.failed', function (response){
+                        console.log(response);
+                        alert("This step of Payment Failed");
+                });
+                    
+                document.getElementById('pay-button').onclick = function(e){
+                    razorpayObject.open();
+                    e.preventDefault();
+                }
+
+                </script>
+        </nav>
+        <div class="content">
+            <h1 class="home">Ammy Virk</h1>
+        </div>
+        <div class="popular_song">
+            <div class="h4">
+                <h4>Trending Song</h4>
+                <div class="btn_s">
+                    <i id="left_scroll" class="bi bi-arrow-left-short"></i>
+                    <i id="right_scroll" class="bi bi-arrow-right-short"></i>
+                </div>
+            </div>
+            <div class="pop_song">
+                <li class="songItem">
+                    <div class="img_play">
+                        <img src="img/1.jpg" alt="alan">
+                        <i class="bi playListPlay bi-play-circle-fill" id="1"></i>
+                    </div>
+                    <h5>On My Way
+                        <br>
+                        <div class="subtitle">Alan Walker</div>
+                    </h5>
+                </li>
+                <li class="songItem">
+                    <div class="img_play">
+                        <img src="img/1.jpg" alt="alan">
+                        <i class="bi playListPlay bi-play-circle-fill" id="2"></i>
+                    </div>
+                    <h5>On My Way
+                        <br>
+                        <div class="subtitle">Alan Walker</div>
+                    </h5>
+                </li>
+                <li class="songItem">
+                    <div class="img_play">
+                        <img src="img/1.jpg" alt="alan">
+                        <i class="bi playListPlay bi-play-circle-fill" id="3"></i>
+                    </div>
+                    <h5>On My Way
+                        <br>
+                        <div class="subtitle">Alan Walker</div>
+                    </h5>
+                </li>
+                <li class="songItem">
+                    <div class="img_play">
+                        <img src="img/1.jpg" alt="alan">
+                        <i class="bi playListPlay bi-play-circle-fill" id="4"></i>
+                    </div>
+                    <h5>On My Way
+                        <br>
+                        <div class="subtitle">Alan Walker</div>
+                    </h5>
+                </li>
+                <li class="songItem">
+                    <div class="img_play">
+                        <img src="img/1.jpg" alt="alan">
+                        <i class="bi playListPlay bi-play-circle-fill" id="5"></i>
+                    </div>
+                    <h5 >On My Way
+                        <br>
+                        <div class="subtitle">Alan Walker</div>
+                    </h5>
+                </li>
+                <span class="hide_song">
+                <li class="songItem">
+                    <div class="img_play">
+                        <img src="img/1.jpg" alt="alan">
+                        <i class="bi playListPlay bi-play-circle-fill" id="6"></i>
+                    </div>
+                    <h5 >On My Way
+                        <br>
+                        <div class="subtitle">Alan Walker</div>
+                    </h5>
+                </li>
+            </span>
+                <span class="hide_song">
+                <li class="songItem">
+                    <div class="img_play">
+                        <img src="img/1.jpg" alt="alan">
+                        <i class="bi playListPlay bi-play-circle-fill" id="7"></i>
+                    </div>
+                    <h5>On My Way
+                        <br>
+                        <div class="subtitle">Alan Walker</div>
+                    </h5>
+                </li>
+            </span>
+                <span class="hide_song">
+                <li class="songItem">
+                    <div class="img_play">
+                        <img src="img/1.jpg" alt="alan">
+                        <i class="bi playListPlay bi-play-circle-fill" id="8"></i>
+                    </div>
+                    <h5>On My Way
+                        <br>
+                        <div class="subtitle">Alan Walker</div>
+                    </h5>
+                </li>
+            </span>
+                <span class="hide_song">
+                <li class="songItem">
+                    <div class="img_play">
+                        <img src="img/1.jpg" alt="alan">
+                        <i class="bi playListPlay bi-play-circle-fill" id="9"></i>
+                    </div>
+                    <h5>On My Way
+                        <br>
+                        <div class="subtitle">Alan Walker</div>
+                    </h5>
+                </li>
+            </span>
+                <span class="hide_song">
+                <li class="songItem">   
+                    <div class="img_play">
+                        <img src="img/1.jpg" alt="alan">
+                        <i class="bi playListPlay bi-play-circle-fill" id="10"></i>
+                    </div>
+                    <h5>On My Way
+                        <br>
+                        <div class="subtitle">Alan Walker</div>
+                    </h5>
+                </li>
+            </span>
+                <span class="hide_song">
+                <li class="songItem">
+                    
+                    <div class="img_play">
+                        <img src="img/1.jpg" alt="alan">
+                        <i class="bi playListPlay bi-play-circle-fill" id="11"></i>
+                    </div>
+                    <h5>On My Way
+                        <br>
+                        <div class="subtitle">Alan Walker</div>
+                    </h5>
+                </li>
+            </span>
+                <span class="hide_song">
+                <li class="songItem">
+                    <div class="img_play">
+                        <img src="img/1.jpg" alt="alan">
+                        <i class="bi playListPlay bi-play-circle-fill" id="12"></i>
+                        <!-- change All id  -->
+                    </div>
+                    <h5>On My Way
+                        <br>
+                        <div class="subtitle">Alan Walker</div>
+                    </h5>
+                </li>
+            </span>
+            </div>
+        </div>
+        <div class="popular_artists">
+            <div class="h4">
+                <h4>Popular Artists</h4>
+                <div class="btn_s">
+                    <i id="left_scrolls" class="bi bi-arrow-left-short"></i>
+                    <i id="right_scrolls" class="bi bi-arrow-right-short"></i>
+                </div>
+            </div>
+     <div class="item">
+        <li>
+        <div class ="card">
+            <div class="cardcontent">
+                <div class="behind">
+                    <div class="behindcontent">
+                        <img src="img/arjit.jpg">
+                    </div>
+                  </div>
+                <div class="front">
+                    <div class="title">
+                      <p class="title">
+                        <strong>Arijit 
+                            Singh</strong>
+                      </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </li>
+
+
+        <li>
+            <div class ="card">
+                <div class="cardcontent">
+                    <div class="behind">
+                        <div class="behindcontent">
+                            <img src="img/alan.jpg">
+                        </div>
+                      </div>
+                    <div class="front">
+                        <div class="title">
+                          <p class="title">
+                            <strong>Alan Walker</strong>
+                          </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class ="card">
+                <div class="cardcontent">
+                    <div class="behind">
+                        <div class="behindcontent">
+                            <img src="img/atif.jpg">
+                        </div>
+                      </div>
+                    <div class="front">
+                        <div class="title">
+                          <p class="title">
+                            <strong>Atif 
+                                 Aslam</strong>
+                          </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class ="card">
+                <div class="cardcontent">
+                    <div class="behind">
+                        <div class="behindcontent">
+                            <img src="img/sonu.jpg">
+                        </div>
+                      </div>
+                    <div class="front">
+                        <div class="title">
+                          <p class="title">
+                            <strong>Sonu Nigam</strong>
+                          </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class ="card">
+                <div class="cardcontent">
+                    <div class="behind">
+                        <div class="behindcontent">
+                            <img src="img/honey.jpg">
+                        </div>
+                      </div>
+                    <div class="front">
+                        <div class="title">
+                          <p class="title">
+                            <strong>Honey Singh</strong>
+                          </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class ="card">
+                <div class="cardcontent">
+                    <div class="behind">
+                        <div class="behindcontent">
+                            <img src="img/guru.jpg">
+                        </div>
+                      </div>
+                    <div class="front">
+                        <div class="title">
+                          <p class="title">
+                            <strong>Guru Randhawa</strong>
+                          </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class ="card">
+                <div class="cardcontent">
+                    <div class="behind">
+                        <div class="behindcontent">
+                            <img src="img/neha.jpg">
+                        </div>
+                      </div>
+                    <div class="front">
+                        <div class="title">
+                          <p class="title">
+                            <strong>Neha Kakkar</strong>
+                          </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class ="card">
+                <div class="cardcontent">
+                    <div class="behind">
+                        <div class="behindcontent">
+                            <img src="img/justin-bieber-lede.jpg">
+                        </div>
+                      </div>
+                    <div class="front">
+                        <div class="title">
+                          <p class="title">
+                            <strong>Justin Bieber</strong>
+                          </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class ="card">
+                <div class="cardcontent">
+                    <div class="behind">
+                        <div class="behindcontent">
+                            <img src="img/sharry.jpg">
+                        </div>
+                      </div>
+                    <div class="front">
+                        <div class="title">
+                          <p class="title">
+                            <strong>Sharry Maan</strong>
+                          </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class ="card">
+                <div class="cardcontent">
+                    <div class="behind">
+                        <div class="behindcontent">
+                            <img src="img/mankirt.jpg">
+                        </div>
+                      </div>
+                    <div class="front">
+                        <div class="title">
+                          <p class="title">
+                            <strong>Mankirt Aulakh</strong>
+                          </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+    </div>
+</div>
+</div>
+
+
+
+    <div class="master_play">
+        
+        <span id="currentStart">0:00</span>
+        <div class="bar">
+            <input type="range" id="seek" min="0" value="0" max="100">
+            <div class="bar2" id="bar2"></div>
+            <div class="dot"></div>
+        </div>
+        <span id="currentEnd">0:00</span>
+
+        <div class="vol">
+            <i class="bi bi-volume-down-fill" id="vol_icon"></i>
+            <input type="range" id="vol" min="0" value="30" max="100">
+            <div class="vol_bar"></div>
+            <div class="dot" id="vol_dot"></div>
+        </div>
+    </div>
+</header>
+    <script src="suggestions.js"></script>
+    <script src="app.js"></script>
+    <script src="../pay/index.js"></script>
+</body>
+
+</html>
